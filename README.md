@@ -9,7 +9,7 @@ Generate TypeScript types and request method code from the Apifox OpenAPI.
 
 ### Installation
 ```shell
-npm install @csv-js/csv --save
+npm install apifox-to-typescript -D
 ```
 
 ### Configuration File

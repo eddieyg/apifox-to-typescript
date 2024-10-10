@@ -9,7 +9,7 @@
 
 ### 安装
 ```shell
-npm install @csv-js/csv --save
+npm install apifox-to-typescript -D
 ```
 
 ### 配置文件
