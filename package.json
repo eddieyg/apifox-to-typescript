@@ -1,12 +1,52 @@
 {
   "name": "apifox-to-typescript",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.0.1",
+  "description": "Generate code for typescript types and request methods via Apifox's open-api.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "apifox-to-ts": "bin/apifox-to-ts.mjs"
+  },
+  "scripts": {
+    "dev": "env-cmd -f .env esno src/command.ts",
+    "test": "env-cmd -f .env npx apifox-to-ts",
+    "build": "unbuild",
+    "release": "pnpm -r publish"
+  },
+  "keywords": [
+    "apifox",
+    "ts",
+    "typescript",
+    "apifox to typescript"
+  ],
+  "author": "eddie",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eddieyg/apifox-to-typescript.git"
+  },
+  "dependencies": {
+    "@types/node": "^22.5.5",
+    "fs-extra": "^11.2.0",
+    "json-schema-to-typescript": "^15.0.2",
+    "minimist": "^1.2.8",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/minimist": "^1.2.5",
+    "env-cmd": "^10.1.0",
+    "esno": "^4.7.0",
+    "unbuild": "^2.0.0"
+  }
 }

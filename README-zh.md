@@ -1,19 +1,19 @@
-# Apifox to TypeScript
-Generate TypeScript types and request method code from the Apifox OpenAPI.
+# Apifox to typescript
+通过 Apifox 的 open-api，生成 typescript 类型和请求方法的代码。
 
-## Documentation Language
+## 文档语种
 - [English](./README.md)
 - [简体中文](./README-zh.md)
 
-## Usage
+## 使用
 
-### Installation
+### 安装
 ```shell
 npm install @csv-js/csv --save
 ```
 
-### Configuration File
-Add the `apifox-to-ts.config.mjs` configuration file in the root directory, which can be configured using the `defineApifoxToTSConfig` method (some configurations are optional).
+### 配置文件
+根目录添加 `apifox-to-ts.config.mjs` 配置文件，可通过 `defineApifoxToTSConfig` 方法配置（部分配置为可选）。
 
 ```typescript
 import { defineApifoxToTSConfig } from 'apifox-to-typescript'
@@ -60,12 +60,12 @@ export async function ${data.name}Api(params: ${data.req}):Promise<${data.res}> 
 
 ```
 
-### Execute Command
+### 执行命令
 
 ```shell
 npx apifox-to-ts
 
-# Command line parameters override scope configuration
+# 命令行参数覆盖 scope 配置
 # --all
 # --selId=138xxxx,139xxxx
 # --selTag=user,login
