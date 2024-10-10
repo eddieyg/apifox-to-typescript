@@ -11,7 +11,8 @@
   },
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
   "bin": {
     "apifox-to-ts": "bin/apifox-to-ts.mjs"
