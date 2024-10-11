@@ -19,20 +19,33 @@ Add the `apifox-to-ts.config.mjs` configuration file in the root directory, whic
 import { defineApifoxToTSConfig } from 'apifox-to-typescript'
 
 export default defineApifoxToTSConfig({
+  /** Apifox Project ID (required) */
   projectId: "138xxxx",
+
+  /** Apifox OpenAPI Secret Key (required) */
   accessToken: "APS-xxxxxxxxxxxxxxxxxxxxxxxx",
+
+  /**
+   * Scope for converting to TypeScript API
+   * For detailed parameters, see the Apifox documentation https://apifox-openapi.apifox.cn/api-173411997
+   */
   scope: {
     type: 'ALL',
   },
-  
+
+  /** Output directory for the converted TypeScript */
   output: 'api-output',
+
+  /** Remove certain parts of the API path in the output directory */
   rmOutputPath: [/^\/api/],
 
+  /** Filter out certain fields when converting to TypeScript */
   filterSchema: {
     parameters: ['content', 'sign'],
     requestBody: ['content', 'sign']
   },
 
+  /** Template for generating API request functions */
   template: {
     import: () => `
 import { queryClient } from "@/api/client"

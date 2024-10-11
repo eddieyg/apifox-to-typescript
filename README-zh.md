@@ -19,20 +19,33 @@ npm install apifox-to-typescript -D
 import { defineApifoxToTSConfig } from 'apifox-to-typescript'
 
 export default defineApifoxToTSConfig({
+  /** Apifox 项目ID（必填） */
   projectId: "138xxxx",
+
+  /** Apifox openapi 秘钥（必填） */
   accessToken: "APS-xxxxxxxxxxxxxxxxxxxxxxxx",
+
+  /**
+   * 转换TS的API范围
+   * 参数详见 apifox 文档 https://apifox-openapi.apifox.cn/api-173411997
+   */
   scope: {
     type: 'ALL',
   },
-  
+
+  /** 转换TS的产出目录 */
   output: 'api-output',
+
+  /** 删除产出目录中 API 路径的部分 */
   rmOutputPath: [/^\/api/],
 
+  /** 转换TS时过滤掉某些字段 */
   filterSchema: {
     parameters: ['content', 'sign'],
     requestBody: ['content', 'sign']
   },
 
+  /** 生成API请求函数的模版 */
   template: {
     import: () => `
 import { queryClient } from "@/api/client"
