@@ -3,6 +3,7 @@ import path from 'node:path';
 import { ApifoxToTSConfig, ApifoxToTSConfigOptions } from './types';
 import minimist from 'minimist'
 import { accessSync } from 'node:fs';
+import { toArray } from './utils';
 
 const CONFIG_FILE_NAME = 'apifox-to-ts.config';
 
@@ -43,23 +44,23 @@ export async function initConfig() {
 
   // cover config by command
   const commandArgv = minimist(process.argv.slice(2))
-  const excludedByTags = commandArgv.excludeTag?.split(',')
+  const excludedByTags = toArray(commandArgv.excludeTag)
   if (commandArgv.selId) {
     config.scope = {
       type: 'SELECTED_ENDPOINTS',
-      selectedEndpointIds: commandArgv.selId.split(',').map(Number),
+      selectedEndpointIds: toArray(commandArgv.selId, true),
       excludedByTags,
     }
   } else if (commandArgv.selTag) {
     config.scope = {
       type: 'SELECTED_TAGS',
-      selectedTags: commandArgv.selTag.split(','),
+      selectedTags: toArray(commandArgv.selTag),
       excludedByTags,
     }
   } else if (commandArgv.selFolder) {
     config.scope = {
       type: 'SELECTED_FOLDERS',
-      selectedFolderIds: commandArgv.selFolder.split(',').map(Number),
+      selectedFolderIds: toArray(commandArgv.selFolder, true),
       excludedByTags,
     }
   } else if (commandArgv.all) {

@@ -4,17 +4,10 @@ export default {
   projectId: process.env.PROJECT_ID,
   accessToken: process.env.ACCESS_TOKEN,
   scope: {
-    type: 'SELECTED_ENDPOINTS',
-    selectedEndpointIds: [
-      191819528, 
-      191955218,
-      // 220654312,
-      221097290,
-      41360731,
-      41342560,
-      42754899,
-      41817934,
-    ]
+    type: "SELECTED_FOLDERS",
+    selectedFolderIds: [
+      8352283,
+    ],
   },
   
   output: 'api-output',

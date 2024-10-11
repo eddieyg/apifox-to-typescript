@@ -10,7 +10,7 @@ async function main() {
   if (!config) {
     return
   }
-  console.log(config);
+  console.log("apply scope: ", config.scope, '\n');
 
   const res = await queryApifoxExport(config)
   if (!res)

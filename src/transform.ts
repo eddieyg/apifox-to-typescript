@@ -56,6 +56,11 @@ function transformSchema (schema?: JSONSchema, filterSchema?: string[]) {
       item.description = [item.title, item.description].filter(Boolean).join(': ')
       delete item.title
     }
+    if (item.type === 'object') {
+      result.properties[key] = transformSchema(item, filterSchema)
+    } else if (item.type === 'array') {
+      item.items = transformSchema(item.items, filterSchema)
+    }
   }
   return result
 }
@@ -64,7 +69,12 @@ export async function transformTs(config: ApifoxToTSConfig, data: any) {
   console.log("typescript transform...")
   const options = {
     bannerComment: '',
-    // unknownAny: false,
+    // Compat https://github.com/bcherny/json-schema-to-typescript/issues/640
+    customName: (schema?: JSONSchema) => {
+      if (schema?.title && /\d/.test(schema.title)) {
+        return 'FillNoName'
+      }
+    }
   }
 
   for (const apiPath in data.paths) {
@@ -183,7 +193,7 @@ export async function transformTs(config: ApifoxToTSConfig, data: any) {
     fsExtra.ensureDirSync(filePath)
     fs.writeFileSync(filePath + '/' + fileName + '.ts', tsContent.join('\n') + '\n')
 
-    console.log(filePath, apiName)
+    console.log(filePath + '/' + fileName + '.ts')
   }
-  console.log("typescript transform done!")
+  console.log("typescript transform done!\n")
 }

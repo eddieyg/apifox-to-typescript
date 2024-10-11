@@ -32,3 +32,16 @@ export function toPascalCase(input: string): string {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('');
 }
+
+export function toArray(value: string | number, toInt: true): number[]
+export function toArray(value: string | number, toInt?: false): string[]
+
+export function toArray(value: string | number, toInt = false) {
+  if (!value && value !== 0)
+    return []
+  if (typeof value === 'number') {
+    return [value]
+  }
+  const arr = value.split(',')
+  return toInt ? arr.map(Number) : arr
+}
