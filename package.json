@@ -1,6 +1,6 @@
 {
   "name": "apifox-to-typescript",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generate code for typescript types and request functions via Apifox's open-api.",
   "type": "module",
   "exports": {
