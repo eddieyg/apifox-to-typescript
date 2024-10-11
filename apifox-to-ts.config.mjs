@@ -7,6 +7,7 @@ export default {
     type: "SELECTED_FOLDERS",
     selectedFolderIds: [
       8352283,
+      35826235
     ],
   },
   

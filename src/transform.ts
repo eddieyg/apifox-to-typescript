@@ -3,6 +3,7 @@ import { compile, JSONSchema } from 'json-schema-to-typescript'
 import { ApifoxToTSConfig } from './types'
 import { cwdPath, toPascalCase, toCamelCase } from './utils'
 import fs from 'node:fs';
+import path from 'node:path';
 
 interface Parameter {
   name: string;
@@ -65,6 +66,14 @@ function transformSchema (schema?: JSONSchema, filterSchema?: string[]) {
   return result
 }
 
+function generateExportTsCode(exportFiles: string[]) {
+  return exportFiles
+    .map(file => `export * from "./${file}"`)
+    .join('\n')
+    + '\n'
+}
+
+
 export async function transformTs(config: ApifoxToTSConfig, data: any) {
   console.log("typescript transform...")
   const options = {
@@ -76,6 +85,7 @@ export async function transformTs(config: ApifoxToTSConfig, data: any) {
       }
     }
   }
+  const exportFiles: string[] = []
 
   for (const apiPath in data.paths) {
     const item = data.paths[apiPath]
@@ -176,24 +186,48 @@ export async function transformTs(config: ApifoxToTSConfig, data: any) {
       }
     }
 
-    let filePath = cwdPath(config.output!)
+    let outputApiPath = apiPaths.join('/')
     if (config.rmOutputPath?.length) {
-      const originApiPath = apiPaths.join('/')
       config.rmOutputPath.some(reg => {
-        if (reg.test(originApiPath)) {
-          filePath += originApiPath.replace(reg, '')
+        if (reg.test(outputApiPath)) {
+          outputApiPath = outputApiPath.replace(reg, '')
           return true
         }
         return false
       })
-    } else {
-      filePath += apiPaths.join('/')
     }
-
+    const filePath = cwdPath(config.output!, outputApiPath + '/')
     fsExtra.ensureDirSync(filePath)
-    fs.writeFileSync(filePath + '/' + fileName + '.ts', tsContent.join('\n') + '\n')
-
-    console.log(filePath + '/' + fileName + '.ts')
+    fs.writeFileSync(
+      path.join(filePath, `${fileName}.ts`), 
+      tsContent.join('\n') + '\n'
+    )
+    
+    const exportFilePath = path.join('.', outputApiPath, fileName)
+    if (!exportFiles.includes(exportFilePath)) {
+      exportFiles.push(exportFilePath)
+    }
+    
+    console.log(
+      path.join(config.output!, exportFilePath + '.ts')
+    )
   }
+
+  // export entry index.ts
+  const exportIndexPath = cwdPath(config.output!, 'index.ts')
+  if (fs.existsSync(exportIndexPath)) {
+    const indexContent = fs.readFileSync(exportIndexPath, 'utf-8')
+    const newExports = exportFiles.filter(file => !indexContent.includes(file))
+    fs.writeFileSync(
+      exportIndexPath, 
+      indexContent + generateExportTsCode(newExports)
+    )
+  } else {
+    fs.writeFileSync(
+      exportIndexPath, 
+      generateExportTsCode(exportFiles)
+    )
+  }
+
   console.log("typescript transform done!\n")
 }

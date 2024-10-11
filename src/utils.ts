@@ -10,9 +10,9 @@ export function ensureDirJsonSync(pathStr: string, data: string) {
   fs.writeJsonSync([...paths, file].join('/'), data)
 }
 
-export function cwdPath(pathStr: string){
+export function cwdPath(...pathStr: string[]){
   const projectRoot = process.cwd()
-  return path.join(projectRoot, pathStr);
+  return path.join(projectRoot, ...pathStr);
 }
 
 export function toCamelCase(input: string): string {
