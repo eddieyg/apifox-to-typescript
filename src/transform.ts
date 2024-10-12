@@ -67,10 +67,10 @@ function transformSchema (schema?: JSONSchema, filterSchema?: string[]) {
 }
 
 function generateExportTsCode(exportFiles: string[]) {
-  return exportFiles
+  const result = exportFiles
     .map(file => `export * from "./${file}"`)
     .join('\n')
-    + '\n'
+  return result ? result + '\n' : result
 }
 
 
