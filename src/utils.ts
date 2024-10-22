@@ -18,6 +18,7 @@ export function cwdPath(...pathStr: string[]){
 export function toCamelCase(input: string): string {
   return input
     .split(/[/_]/)
+    .filter(s => Boolean(s))
     .map((word, index) => {
       return index === 0 
         ? word.toLowerCase() 
@@ -29,6 +30,7 @@ export function toCamelCase(input: string): string {
 export function toPascalCase(input: string): string {
   return input
     .split(/[/_]/)
+    .filter(s => Boolean(s))
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('');
 }

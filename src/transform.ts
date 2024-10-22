@@ -73,6 +73,19 @@ function generateExportTsCode(exportFiles: string[]) {
   return result ? result + '\n' : result
 }
 
+function rmPath(pathStr: string, rmPathReg?: RegExp[]) {
+  if (rmPathReg?.length) {
+    rmPathReg.some(reg => {
+      if (reg.test(pathStr)) {
+        pathStr = pathStr.replace(reg, '')
+        return true
+      }
+      return false
+    })
+  }
+  return pathStr
+}
+
 
 export async function transformTs(config: ApifoxToTSConfig, data: any) {
   console.log("typescript transform...")
@@ -91,8 +104,9 @@ export async function transformTs(config: ApifoxToTSConfig, data: any) {
     const item = data.paths[apiPath]
     const apiPaths = apiPath.split('/')
     const fileName = apiPaths.pop()!
-    const apiName = toPascalCase(fileName)
-    const apiNameCC = toCamelCase(fileName)
+    const methodNamePath = rmPath(apiPath, config.rmOutputPath)
+    const apiName = toPascalCase(methodNamePath)
+    const apiNameCC = toCamelCase(methodNamePath)
     const apiTypeName = {
       getReq: apiName + 'GetReq',
       getRes: apiName + 'GetRes',
@@ -186,16 +200,7 @@ export async function transformTs(config: ApifoxToTSConfig, data: any) {
       }
     }
 
-    let outputApiPath = apiPaths.join('/')
-    if (config.rmOutputPath?.length) {
-      config.rmOutputPath.some(reg => {
-        if (reg.test(outputApiPath)) {
-          outputApiPath = outputApiPath.replace(reg, '')
-          return true
-        }
-        return false
-      })
-    }
+    let outputApiPath = rmPath(apiPaths.join('/'), config.rmOutputPath)
     const filePath = cwdPath(config.output!, outputApiPath + '/')
     fsExtra.ensureDirSync(filePath)
     fs.writeFileSync(
